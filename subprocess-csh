@@ -1,0 +1,22 @@
+When you use subprocess.run(['csh'], shell=True), it attempts to start a new instance of the C Shell. 
+However, because you have specified shell=True, the command is executed in a new shell process, which doesn't return control to the 
+original Python script until the C Shell session is exited.
+
+Why***You***Don't***See***Output:
+New Shell Session: The csh command launches an interactive shell session. Your Python script waits for that session to finish, which 
+won't happen until you exit the C Shell.
+No Command Execution: Since the C Shell is now running, it doesn't execute any commands that would produce output. You would need to 
+exit the shell manually (usually by typing exit or pressing Ctrl+D).
+
+How to Get Output:
+If you want to run a command in the C Shell and get output, you need to specify a command directly within the C Shell. For example:
+import subprocess
+
+p1 = subprocess.run(['csh', '-c', 'echo Hello from C Shell'], capture_output=True, text=True)
+print(p1.stdout)  # This will print: Hello from C Shell
+
+
+Explanation:
+['csh', '-c', 'echo Hello from C Shell']: This tells the C Shell to execute the command provided after -c and then exit.
+capture_output=True: Captures the output of the command.
+text=True: Returns the output as a string instead of bytes.
